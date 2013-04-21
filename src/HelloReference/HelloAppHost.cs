@@ -41,6 +41,7 @@ namespace HelloReference
         public override void Configure(Container container)
         {
             _appHostCommon.Init(container);
+            this.SetConfig(_appHostCommon.GetConfig());
         }
     }
 
@@ -56,7 +57,8 @@ namespace HelloReference
 
         public override void Configure(Container container)
         {
-            _appHostCommon.Init(container);  
+            _appHostCommon.Init(container);
+            this.SetConfig(_appHostCommon.GetConfig());
         }
     }
 
@@ -98,7 +100,9 @@ namespace HelloReference
         {
             return new EndpointHostConfig
             {
-                EnableFeatures = Feature.All.Remove(Feature.Xml | Feature.Soap),
+                EnableFeatures = Feature.All.Remove(
+                    Feature.Xml | Feature.Soap | Feature.Csv | Feature.Jsv
+                    ),
                 DebugMode = true,
                 DefaultContentType = ContentType.Json
             };
