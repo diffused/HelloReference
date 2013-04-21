@@ -103,6 +103,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppHostConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

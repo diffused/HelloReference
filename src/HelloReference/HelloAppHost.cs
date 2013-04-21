@@ -42,6 +42,7 @@ namespace HelloReference
         {
             _appHostCommon.Init(container);
             this.SetConfig(_appHostCommon.GetConfig());
+            this.Plugins.AddRange(_appHostCommon.GetPlugins());
         }
     }
 
@@ -59,69 +60,13 @@ namespace HelloReference
         {
             _appHostCommon.Init(container);
             this.SetConfig(_appHostCommon.GetConfig());
+            this.Plugins.AddRange(_appHostCommon.GetPlugins());
         }
     }
 
     
     
-    /// <summary>
-    /// Injectable common config settings
-    /// </summary>
-    public interface IAppHostConfig
-    {
-        void Init(Container container);
-        EndpointHostConfig GetConfig();
-    }
-
-    /// <summary>
-    /// Concrete config gets passed during Global.asax Application_Start
-    /// </summary>
-    public class AppHostConfig : IAppHostConfig
-    {
-        public void Init(Container container)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["HelloDb"].ConnectionString;
-            var dbFactory = new OrmLiteConnectionFactory(
-                 connectionString,
-                 true,
-                 SqlServerDialect.Provider);
-
-            initDb(dbFactory);
-
-            
-            container.RegisterAutoWiredAs<Repository, IRepository>().ReusedWithin(ReuseScope.None);
-
-            container.RegisterAutoWired<HelloService>().ReusedWithin(ReuseScope.None);
-
-            container.Register<IDbConnectionFactory>(dbFactory);            
-        }
-
-        public EndpointHostConfig GetConfig()
-        {
-            return new EndpointHostConfig
-            {
-                EnableFeatures = Feature.All.Remove(
-                    Feature.Xml | Feature.Soap | Feature.Csv | Feature.Jsv
-                    ),
-                DebugMode = true,
-                DefaultContentType = ContentType.Json
-            };
-        }
-
-        void initDb(IDbConnectionFactory dbFactory)
-        {
-            using (var db = dbFactory.Open())
-            {
-                db.DropAndCreateTable<Greeting>();
-                db.Insert<Greeting>(new Greeting { Greet = "Howdy" });
-            }
-        }
-        
-        //public static IEnumerable<IPlugin> GetPlugins()
-        //{
-        //    yield return new ValidationFeature();
-        //}
-    }
+    
 
 
 
